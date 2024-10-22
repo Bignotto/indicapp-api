@@ -1,0 +1,92 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserType {
+  ADMIN
+  PROVIDER
+  USER
+  GUEST
+}
+
+model User {
+  id       String   @id
+  name     String?
+  email    String?
+  phone    String?
+  userType UserType @default(USER) @map(name: "user_type")
+
+  phoneConfirmed Boolean   @default(false)
+  emailConfirmed Boolean   @default(false)
+  emailVerified  DateTime?
+  image          String?
+
+  createdAt DateTime            @default(now()) @map(name: "created_at")
+  updatedAt DateTime            @default(now()) @updatedAt @map(name: "updated_at")
+  services  ProviderServiceAd[]
+
+  @@map(name: "users")
+}
+
+model ProviderServiceAd {
+  id          String @id @default(cuid())
+  title       String
+  description String
+  value       Int
+
+  serviceType   ServiceType @relation(fields: [serviceTypeId], references: [id])
+  serviceTypeId Int
+
+  serviceClass String   @map(name: "service_class")
+  validTo      DateTime @map(name: "valid_to")
+  validFrom    DateTime @map(name: "valid_from")
+
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @updatedAt @map(name: "updated_at")
+
+  provider   User     @relation(fields: [providerId], references: [id])
+  providerId String
+  Review     Review[]
+
+  @@map(name: "provider_services")
+}
+
+model ServiceType {
+  id          Int                 @id @default(autoincrement())
+  name        String
+  description String
+  services    ProviderServiceAd[]
+
+  @@map(name: "service_types")
+}
+
+model Review {
+  id Int @id @default(autoincrement())
+
+  providerService   ProviderServiceAd? @relation(fields: [providerServiceId], references: [id])
+  providerServiceId String             @map("provider_service_ad_id")
+
+  title      String
+  text       String
+  reviewDate DateTime @default(now()) @map("review_date")
+  score      Int
+
+  @@map("review")
+}
+
+model Log {
+  id           Int      @id @default(autoincrement())
+  event        String
+  eventDate    DateTime @map(name: "event_date")
+  subject      String
+  data         String
+  userId       String   @map(name: "user_id")
+  userProvider String   @map(name: "user_provider")
+
+  @@map("log")
+}
