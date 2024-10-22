@@ -1,0 +1,123 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserType {
+  ADMIN
+  PROVIDER
+  USER
+  GUEST
+}
+
+enum ServiceClass {
+  SERVICE
+  PRODUCT
+}
+
+model User {
+  id       String   @id
+  name     String?
+  email    String?
+  phone    String?
+  userType UserType @default(USER) @map(name: "user_type")
+
+  phoneConfirmed Boolean   @default(false)
+  emailConfirmed Boolean   @default(false)
+  emailVerified  DateTime?
+  image          String?
+
+  createdAt DateTime            @default(now()) @map(name: "created_at")
+  updatedAt DateTime            @default(now()) @updatedAt @map(name: "updated_at")
+  services  ProviderServiceAd[]
+
+  providerScore Int @default(0) @map(name: "provider_score")
+
+  reviews Review[]
+
+  @@map(name: "users")
+}
+
+model ProviderServiceAd {
+  id          String @id @default(cuid())
+  title       String
+  description String
+  value       Int
+
+  serviceType   ServiceType @relation(fields: [serviceTypeId], references: [id])
+  serviceTypeId Int
+
+  serviceSubType   ServiceSubType @relation(fields: [serviceSubTypeId], references: [id])
+  serviceSubTypeId Int
+
+  serviceClass ServiceClass @default(SERVICE) @map(name: "service_class")
+  validTo      DateTime     @map(name: "valid_to")
+  validFrom    DateTime     @map(name: "valid_from")
+
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @updatedAt @map(name: "updated_at")
+
+  provider   User     @relation(fields: [providerId], references: [id])
+  providerId String
+  reviews    Review[]
+
+  @@map(name: "provider_services")
+}
+
+model ServiceType {
+  id          Int                 @id @default(autoincrement())
+  name        String
+  description String
+  services    ProviderServiceAd[]
+
+  @@map(name: "service_types")
+}
+
+model ServiceSubType {
+  id          Int                 @id @default(autoincrement())
+  name        String
+  description String
+  services    ProviderServiceAd[]
+
+  @@map(name: "service_sub_types")
+}
+
+model Review {
+  id Int @id @default(autoincrement())
+
+  providerService   ProviderServiceAd @relation(fields: [providerServiceId], references: [id])
+  providerServiceId String            @map("provider_service_ad_id")
+
+  title      String
+  text       String
+  reviewDate DateTime @default(now()) @map("review_date")
+  score      Int
+
+  reviewer   User   @relation(fields: [reviewerId], references: [id])
+  reviewerId String
+
+  @@map("review")
+}
+
+enum LogEvent {
+  CLICK
+  SEARCH
+  VIEW
+  CONTACT
+}
+
+model Log {
+  id           Int      @id @default(autoincrement())
+  event        LogEvent
+  eventDate    DateTime @map(name: "event_date")
+  subject      String
+  data         String
+  userId       String   @map(name: "user_id")
+  userProvider String   @map(name: "user_provider")
+
+  @@map("log")
+}
