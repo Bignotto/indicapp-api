@@ -30,7 +30,18 @@ export class InMemoryUsersRepository implements IUsersRepository {
       id: randomUUID(),
       email: data.email,
       name: data.name,
-      phone: data.phone!
+      phone: data.phone,
+      accountProvider: data.accountProvider!,
+      accountId: '',
+      createdAt: new Date(),
+      emailConfirmed: false,
+      emailVerified: null,
+      image: '',
+      phoneConfirmed: false,
+      providerScore: 0,
+      updatedAt: new Date(),
+      userType: 'USER'
+
     }
 
     this.items.push(user)
@@ -41,15 +52,5 @@ export class InMemoryUsersRepository implements IUsersRepository {
   async setUserType(userId: string, userType: UserType) {
     const userIndex = this.items.findIndex((item) => item.id === userId)
     this.items[userIndex].userType = userType
-  }
-
-  async setUserOrganization(
-    userId: string,
-    organizationId: string,
-  ): Promise<User> {
-    const userIndex = this.items.findIndex((item) => item.id === userId)
-    this.items[userIndex].partOfOrganizationId = organizationId
-
-    return this.items[userIndex]
   }
 }
