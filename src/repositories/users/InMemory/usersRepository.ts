@@ -53,4 +53,9 @@ export class InMemoryUsersRepository implements IUsersRepository {
     const userIndex = this.items.findIndex((item) => item.id === userId)
     this.items[userIndex].userType = userType
   }
+
+  async delete(userId: string): Promise<void> {
+    const filteredArray = this.items.filter((item) => item.id !== userId)
+    this.items = filteredArray
+  }
 }
