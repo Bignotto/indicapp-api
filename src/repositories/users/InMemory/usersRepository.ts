@@ -1,6 +1,6 @@
 import { Prisma, User, UserType } from '@prisma/client'
 import { randomUUID } from 'node:crypto'
-import { IUsersRepository } from '../IUsersRepository'
+import { IUsersRepository, UpdateUserData } from '../IUsersRepository'
 
 export class InMemoryUsersRepository implements IUsersRepository {
   public items: User[] = []
@@ -57,5 +57,22 @@ export class InMemoryUsersRepository implements IUsersRepository {
   async delete(userId: string): Promise<void> {
     const filteredArray = this.items.filter((item) => item.id !== userId)
     this.items = filteredArray
+  }
+
+
+  async update(userId: string, data: UpdateUserData): Promise<User> {
+    const userIndex = this.items.findIndex((item) => item.id === userId)
+
+    if (userIndex >= 0) {
+      this.items[userIndex] = {
+        ...this.items[userIndex],
+        ...data,
+        updatedAt: new Date()
+      }
+
+      return this.items[userIndex]
+    }
+
+    throw new Error('User not found')
   }
 }
