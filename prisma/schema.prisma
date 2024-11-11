@@ -19,11 +19,17 @@ enum ServiceClass {
   PRODUCT
 }
 
+enum AccountProvider {
+  GOOGLE
+  APPLE
+  EMAIL
+}
+
 model User {
-  id       String   @id
-  name     String?
-  email    String?
-  phone    String?
+  id       String   @id @default(uuid())
+  name     String
+  email    String
+  phone    String
   userType UserType @default(USER) @map(name: "user_type")
 
   phoneConfirmed Boolean   @default(false)
@@ -31,9 +37,13 @@ model User {
   emailVerified  DateTime?
   image          String?
 
-  createdAt DateTime            @default(now()) @map(name: "created_at")
-  updatedAt DateTime            @default(now()) @updatedAt @map(name: "updated_at")
-  services  ProviderServiceAd[]
+  accountId       String?
+  accountProvider AccountProvider @default(EMAIL)
+
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map(name: "updated_at")
+
+  services ProviderServiceAd[]
 
   providerScore Int @default(0) @map(name: "provider_score")
 
