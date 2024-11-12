@@ -1,4 +1,5 @@
 import { EmailAlreadyInUseError } from '@/useCases/users/errors/EmailAlreadyInUseError';
+import { InvalidPhoneNumberError } from '@/useCases/users/errors/InvalidPhoneNumberError';
 import { makeCreateNewUserUseCase } from '@/useCases/users/factories/makeCreateUserUseCase';
 import { AccountProvider } from '@prisma/client';
 import { FastifyReply, FastifyRequest } from 'fastify';
@@ -30,6 +31,9 @@ export async function createNewUser(
   } catch (error) {
     if (error instanceof EmailAlreadyInUseError) {
       return reply.status(409).send({ message: error.message });
+    }
+    if (error instanceof InvalidPhoneNumberError) {
+      return reply.status(422).send({ message: error.message });
     }
 
     throw error;
