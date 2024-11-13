@@ -5,7 +5,7 @@ import { z } from 'zod';
 
 export async function getUser(request: FastifyRequest, reply: FastifyReply) {
   const getUserParamsSchema = z.object({
-    id: z.string().uuid(),
+    id: z.string(),
   });
 
   const { id } = getUserParamsSchema.parse(request.params);
@@ -13,7 +13,7 @@ export async function getUser(request: FastifyRequest, reply: FastifyReply) {
   try {
     const getUserByIdUseCase = makeGetUserByIdUseCase();
     const user = await getUserByIdUseCase.execute(id);
-    return user;
+    return reply.status(200).send({ user });
   } catch (error) {
     if (error instanceof UserNotFoundError) {
       return reply.status(404).send({ message: error.message });
