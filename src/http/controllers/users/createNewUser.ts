@@ -22,12 +22,13 @@ export async function createNewUser(
 
   try {
     const createUserUseCase = makeCreateNewUserUseCase();
-    await createUserUseCase.execute({
+    const user = await createUserUseCase.execute({
       name,
       email,
       phone,
       accountProvider,
     });
+    return reply.status(201).send(user);
   } catch (error) {
     if (error instanceof EmailAlreadyInUseError) {
       return reply.status(409).send({ message: error.message });
