@@ -27,17 +27,16 @@ export class UpdateUserUseCase {
       throw new UserNotFoundError(userId)
     }
 
+    let cleanedPhone;
     if (phone) {
-      const phoneRegex = /^\+[1-9]\d{10,14}$/
-      if (!phoneRegex.test(phone)) {
-        throw new InvalidPhoneNumberError()
-      }
+      cleanedPhone = phone.replace(/[^0-9]/g, '')
+      if (cleanedPhone.length !== 11) throw new InvalidPhoneNumberError()
     }
 
     const updatedUser = await this.usersRepository.update(userId, {
       name: name ?? user.name,
       email: email ?? user.email,
-      phone: phone ?? user.phone,
+      phone: cleanedPhone ?? user.phone,
       image: image ?? `${user.image}`,
     })
 
