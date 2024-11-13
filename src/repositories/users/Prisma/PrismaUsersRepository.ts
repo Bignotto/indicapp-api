@@ -1,12 +1,11 @@
 import { prisma } from '@/lib/prisma'
 import { $Enums, Prisma, User } from '@prisma/client'
-import { IUsersRepository, UpdateUserData } from '../IUsersRepository'
+import { IUsersRepository } from '../IUsersRepository'
 
 export class PrismaUsersRepository implements IUsersRepository {
 
   async findByEmail(email: string) {
-    //TODO: make email unique
-    const user = await prisma.user.findFirst({
+    const user = await prisma.user.findUnique({
       where: {
         email,
       },
@@ -41,10 +40,22 @@ export class PrismaUsersRepository implements IUsersRepository {
     })
   }
 
-  async update(userId: string, data: UpdateUserData): Promise<User> {
-    throw new Error('Method not implemented.')
+  async update(userId: string, data: Prisma.UserUpdateInput): Promise<User> {
+    const user = await prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data,
+    })
+
+    return user;
   }
+
   async delete(userId: string): Promise<void> {
-    throw new Error('Method not implemented.')
+    await prisma.user.delete({
+      where: {
+        id: userId,
+      },
+    })
   }
 }
