@@ -31,7 +31,7 @@ describe('Update User Use Case', () => {
 
     expect(updatedUser.name).toBe('Jane Doe');
     expect(updatedUser.email).toBe('jane@example.com');
-    expect(updatedUser.phone).toBe('+12345678902');
+    expect(updatedUser.phone).toBe('12345678902');
     expect(updatedUser.image).toBe('new-image-url');
   });
 
