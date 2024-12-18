@@ -58,4 +58,14 @@ export class PrismaUsersRepository implements IUsersRepository {
       },
     })
   }
+
+  async findByAccountId(accountId: string) {
+    const user = await prisma.user.findFirst({
+      where: {
+        accountId,
+      },
+    })
+
+    return user
+  }
 }

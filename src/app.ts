@@ -1,11 +1,17 @@
 import { usersRoutes } from '@/http/controllers/users/routes';
+import cors from '@fastify/cors';
 import { fastify } from 'fastify';
 import { ZodError } from 'zod';
 import { env } from './env/config';
 
 export const app = fastify();
 
-// app.register(fastifyCookie)
+// Register CORS
+app.register(cors, {
+  origin: true, // Allows all origins
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+  credentials: true,
+});
 
 // app.register(fastifyJwt, {
 //   secret: env.THE_APP_SECRET,

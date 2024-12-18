@@ -14,11 +14,11 @@ export async function createNewUser(
     email: z.string().email(),
     phone: z.string(),
     accountProvider: z.nativeEnum(AccountProvider),
+    accountId: z.string().optional(),
   });
 
-  const { name, email, phone, accountProvider } = createUserBodySchema.parse(
-    request.body,
-  );
+  const { name, email, phone, accountProvider, accountId } =
+    createUserBodySchema.parse(request.body);
 
   try {
     const createUserUseCase = makeCreateNewUserUseCase();
@@ -27,6 +27,7 @@ export async function createNewUser(
       email,
       phone,
       accountProvider,
+      accountId,
     });
     return reply.status(201).send(user);
   } catch (error) {
