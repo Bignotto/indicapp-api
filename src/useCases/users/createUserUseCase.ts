@@ -6,7 +6,7 @@ import { InvalidPhoneNumberError } from "./errors/InvalidPhoneNumberError";
 interface CreateNewUserRequest {
   name: string
   email: string
-  phone: string
+  phone?: string
   accountProvider: AccountProvider,
   accountId?: string
 }
@@ -27,9 +27,11 @@ export class CreateUserUseCase {
     if (userWithSameEmail) {
       throw new EmailAlreadyInUseError()
     }
-
-    const cleanedPhone = phone.replace(/[^0-9]/g, '')
-    if (cleanedPhone.length !== 11) throw new InvalidPhoneNumberError()
+    let cleanedPhone;
+    if (phone) {
+      cleanedPhone = phone.replace(/[^0-9]/g, '')
+      if (cleanedPhone.length !== 11) throw new InvalidPhoneNumberError()
+    }
 
     const user = await this.usersRepository.create({
       name,

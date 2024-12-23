@@ -12,7 +12,7 @@ export async function createNewUser(
   const createUserBodySchema = z.object({
     name: z.string(),
     email: z.string().email(),
-    phone: z.string(),
+    phone: z.string().optional(),
     accountProvider: z.nativeEnum(AccountProvider),
     accountId: z.string().optional(),
   });
