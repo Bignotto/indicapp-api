@@ -29,7 +29,7 @@ model User {
   id       String   @id @default(uuid())
   name     String
   email    String   @unique
-  phone    String
+  phone    String?
   userType UserType @default(USER) @map(name: "user_type")
 
   phoneConfirmed Boolean   @default(false)

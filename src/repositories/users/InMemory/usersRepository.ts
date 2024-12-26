@@ -75,4 +75,14 @@ export class InMemoryUsersRepository implements IUsersRepository {
 
     throw new Error('User not found')
   }
+
+  async findByAccountId(accountId: string) {
+    const user = this.items.find((item) => item.accountId === accountId)
+
+    if (!user) {
+      return null
+    }
+
+    return user
+  }
 }
