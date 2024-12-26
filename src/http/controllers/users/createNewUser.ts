@@ -15,10 +15,21 @@ export async function createNewUser(
     phone: z.string().optional(),
     accountProvider: z.nativeEnum(AccountProvider),
     accountId: z.string().optional(),
+    image: z.string().optional(),
+    phoneConfirmed: z.boolean().optional(),
+    emailConfirmed: z.boolean().optional(),
   });
 
-  const { name, email, phone, accountProvider, accountId } =
-    createUserBodySchema.parse(request.body);
+  const {
+    name,
+    email,
+    phone,
+    accountProvider,
+    accountId,
+    image,
+    phoneConfirmed,
+    emailConfirmed,
+  } = createUserBodySchema.parse(request.body);
 
   try {
     const createUserUseCase = makeCreateNewUserUseCase();
@@ -28,6 +39,9 @@ export async function createNewUser(
       phone,
       accountProvider,
       accountId,
+      image,
+      phoneConfirmed,
+      emailConfirmed,
     });
     return reply.status(201).send(user);
   } catch (error) {

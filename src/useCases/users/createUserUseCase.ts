@@ -8,7 +8,10 @@ interface CreateNewUserRequest {
   email: string
   phone?: string
   accountProvider: AccountProvider,
-  accountId?: string
+  accountId?: string,
+  image?: string,
+  phoneConfirmed?: boolean,
+  emailConfirmed?: boolean,
 }
 
 interface CreateNewUserResponse {
@@ -21,7 +24,7 @@ export class CreateUserUseCase {
   ) { }
 
   async execute({
-    name, email, phone, accountProvider, accountId
+    name, email, phone, accountProvider, accountId, image, phoneConfirmed, emailConfirmed
   }: CreateNewUserRequest): Promise<CreateNewUserResponse> {
     const userWithSameEmail = await this.usersRepository.findByEmail(email)
     if (userWithSameEmail) {
@@ -38,7 +41,10 @@ export class CreateUserUseCase {
       email,
       phone: cleanedPhone,
       accountProvider,
-      accountId
+      accountId,
+      image,
+      phoneConfirmed,
+      emailConfirmed
     })
 
     return { user }
