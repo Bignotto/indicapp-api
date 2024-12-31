@@ -49,6 +49,9 @@ model User {
 
   reviews Review[]
 
+  city   City? @relation(fields: [cityId], references: [id])
+  cityId Int?
+
   @@map(name: "users")
 }
 
@@ -111,6 +114,19 @@ model Review {
   reviewerId String
 
   @@map("review")
+}
+
+model City {
+  id        Int     @id @default(autoincrement())
+  name      String
+  country   String?
+  state     String?
+  latitude  Float?
+  longitude Float?
+  ibgeCode  String? @unique @map(name: "ibge_code")
+  User      User[]
+
+  @@map(name: "city")
 }
 
 enum LogEvent {
