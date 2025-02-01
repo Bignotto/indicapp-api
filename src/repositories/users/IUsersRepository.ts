@@ -12,7 +12,7 @@ export interface IUsersRepository {
   findByEmail(email: string): Promise<User | null>
   findByAccountId(accountId: string): Promise<User | null>
   create(data: Prisma.UserCreateInput): Promise<User>
-  update(userId: string, data: UpdateUserData): Promise<User>
+  update(userId: string, data: Prisma.UserUpdateInput): Promise<User>
   delete(userId: string): Promise<void>
   setUserType(userId: string, userType: UserType): Promise<void>
 }
