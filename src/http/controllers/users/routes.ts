@@ -1,3 +1,4 @@
+import { verifyJwt } from '@/http/middlewares/verifyJwt'
 import { FastifyInstance } from 'fastify'
 import { createNewUser } from './createNewUser'
 import { deleteUser } from './deleteUser'
@@ -7,6 +8,8 @@ import { updateUser } from './updateUser'
 import { updateUserPhone } from './updateUserPhone'
 
 export async function usersRoutes(app: FastifyInstance) {
+  app.addHook('onRequest', verifyJwt)
+
   app.post('/users', createNewUser)
   app.get('/users/:id', getUser)
   app.put('/users/:id', updateUser)
