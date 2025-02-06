@@ -22,8 +22,6 @@ export class UpdateUserUseCase {
     image,
   }: UpdateUserUseCaseRequest): Promise<User> {
     const user = await this.usersRepository.findById(userId)
-    console.log({ foundUser: user, image })
-
 
     if (!user) {
       throw new UserNotFoundError(userId)
