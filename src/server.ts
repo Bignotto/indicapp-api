@@ -1,6 +1,6 @@
 // server.ts
-import { app } from './app';
-import { env } from './env/config';
+import { app } from './app'
+import { env } from './env/config'
 
 app
   .listen({
@@ -8,5 +8,5 @@ app
     port: env.PORT,
   })
   .then(() => {
-    console.log(`${env.THE_APP_NAME} - server running! PORT:${env.PORT}`);
-  });
+    console.log(`${env.THE_APP_NAME} - server running! PORT:${env.PORT}`)
+  })
