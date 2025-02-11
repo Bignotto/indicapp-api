@@ -1,4 +1,5 @@
 import { usersRoutes } from '@/http/controllers/users/routes'
+import { serviceAdsRoutes } from '@/http/routes/serviceAds'
 import cors from '@fastify/cors'
 import fastifyJwt from '@fastify/jwt'
 import { fastify } from 'fastify'
@@ -26,6 +27,7 @@ app.register(fastifyJwt, {
 })
 
 app.register(usersRoutes)
+app.register(serviceAdsRoutes)
 
 app.setErrorHandler((error, _, reply) => {
   if (error instanceof ZodError) {
