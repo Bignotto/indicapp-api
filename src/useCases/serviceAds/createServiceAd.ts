@@ -41,6 +41,18 @@ export class CreateServiceAdUseCase {
           id: user.id,
         },
       },
+      validTo: "",
+      validFrom: "",
+      serviceType: {
+        create: undefined,
+        connectOrCreate: undefined,
+        connect: undefined
+      },
+      serviceSubType: {
+        create: undefined,
+        connectOrCreate: undefined,
+        connect: undefined
+      }
     })
 
     return {
