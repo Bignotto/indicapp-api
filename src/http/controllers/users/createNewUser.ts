@@ -10,6 +10,7 @@ export async function createNewUser(
   reply: FastifyReply,
 ) {
   const createUserBodySchema = z.object({
+    id: z.string(),
     name: z.string(),
     email: z.string().email(),
     phone: z.string().optional(),
@@ -21,6 +22,7 @@ export async function createNewUser(
   })
 
   const {
+    id,
     name,
     email,
     phone,
@@ -34,6 +36,7 @@ export async function createNewUser(
   try {
     const createUserUseCase = makeCreateNewUserUseCase()
     const user = await createUserUseCase.execute({
+      id,
       name,
       email,
       phone,

@@ -8,10 +8,8 @@ export async function verifyJwt(request: FastifyRequest, reply: FastifyReply) {
 
     const payload = await request.jwtVerify()
 
-    // NEXT: FIX user creation to use id from supabase instead of creating new
-    // Add user info from JWT payload to request object
     request.user = {
-      sub: payload.sub, //eslint-disable-line
+      sub: (payload as { sub: string }).sub,
     }
   } catch (error) {
     return reply.status(401).send({ message: 'Unauthorized.' })

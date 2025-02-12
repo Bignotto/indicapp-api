@@ -8,6 +8,8 @@ interface CreateServiceAdRequest {
   title: string
   description: string
   value: number
+  serviceType: number
+  serviceSubType: number
 }
 
 interface CreateServiceAdResponse {
@@ -25,12 +27,17 @@ export class CreateServiceAdUseCase {
     title,
     description,
     value,
+    serviceType,
+    serviceSubType
   }: CreateServiceAdRequest): Promise<CreateServiceAdResponse> {
     const user = await this.usersRepository.findById(providerId)
 
     if (!user) {
       throw new UserNotFoundError(providerId)
     }
+
+    const today = new Date()
+    const validTo = new Date(today.getFullYear() + 1, today.getMonth(), today.getDate())
 
     const serviceAd = await this.serviceAdsRepository.create({
       title,
@@ -41,22 +48,23 @@ export class CreateServiceAdUseCase {
           id: user.id,
         },
       },
-      validTo: "",
-      validFrom: "",
+      validTo,
+      validFrom: today,
       serviceType: {
-        create: undefined,
-        connectOrCreate: undefined,
-        connect: undefined
+        connect: {
+          id: serviceType,
+        }
       },
       serviceSubType: {
-        create: undefined,
-        connectOrCreate: undefined,
-        connect: undefined
+        connect: {
+          id: serviceSubType,
+        }
       }
     })
 
     return {
       serviceAd,
     }
+
   }
 }

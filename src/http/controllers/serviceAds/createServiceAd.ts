@@ -1,5 +1,6 @@
 import { UserNotFoundError } from '@/global/errors/UserNotFoundError'
 import { makeCreateServiceAdUseCase } from '@/useCases/serviceAds/factories/makeCreateServiceAdUseCase'
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
 
@@ -11,11 +12,12 @@ export async function createServiceAd(
     title: z.string(),
     description: z.string(),
     value: z.number().positive(),
+    serviceType: z.number().positive(),
+    serviceSubType: z.number().positive(),
   })
 
-  const { title, description, value } = createServiceAdBodySchema.parse(
-    request.body,
-  )
+  const { title, description, value, serviceType, serviceSubType } =
+    createServiceAdBodySchema.parse(request.body)
 
   try {
     const createServiceAdUseCase = makeCreateServiceAdUseCase()
@@ -25,6 +27,8 @@ export async function createServiceAd(
       title,
       description,
       value,
+      serviceType,
+      serviceSubType,
     })
 
     return reply.status(201).send({
@@ -34,6 +38,19 @@ export async function createServiceAd(
     if (error instanceof UserNotFoundError) {
       return reply.status(404).send({ message: error.message })
     }
+
+    // FIX: make customized errors and void using prisma errors iside controllers
+    if (error instanceof PrismaClientKnownRequestError) {
+      if (error.code === 'P2025') {
+        console.error({ error: error.code, cause: error.meta?.cause })
+        return reply
+          .status(404)
+          .send({ message: 'Service type or service sub type not found' })
+      }
+    }
+
+    console.log('error creating service ad')
+    console.log(JSON.stringify(error, null, 2))
 
     throw error
   }
