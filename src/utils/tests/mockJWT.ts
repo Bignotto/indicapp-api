@@ -1,7 +1,9 @@
 import { env } from '@/env/config'
 import { supabase } from '@/lib/supabase'
+import { FastifyInstance } from 'fastify'
+import request from 'supertest'
 
-export async function getSupabaseAccessToken() {
+export async function getSupabaseAccessToken(app: FastifyInstance) {
   const {
     data: { session },
     error,
@@ -13,8 +15,27 @@ export async function getSupabaseAccessToken() {
   if (error) {
     throw new Error(`Failed to get access token: ${error.message}`)
   }
+  if (!session) {
+    throw new Error('No session found')
+  }
 
-  return session?.access_token
+  await request(app.server)
+    .post('/users')
+    .set('Authorization', `Bearer ${session.access_token}`)
+    .send({
+      id: session.user.id,
+      name: 'John Doe',
+      email: 'johndoe@example.com',
+      phone: '11999999999',
+      accountProvider: 'EMAIL',
+    })
+
+  const returnData: {
+    token: string
+    userId: string
+  } = { token: session.access_token, userId: session.user.id }
+
+  return returnData
 }
 
 export function generateMockJWT(payload = {}) {

@@ -31,8 +31,9 @@ app.register(serviceAdsRoutes)
 
 app.setErrorHandler((error, _, reply) => {
   if (error instanceof ZodError) {
+    console.log(JSON.stringify(error, null, 2))
     return reply
-      .status(400)
+      .status(500)
       .send({ message: 'Validation error', issues: error.format() })
   }
 

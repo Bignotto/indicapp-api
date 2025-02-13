@@ -8,7 +8,7 @@ describe('Update Service Ad (e2e)', () => {
 
   beforeAll(async () => {
     await app.ready()
-    token = await getSupabaseAccessToken()
+    token = await getSupabaseAccessToken(app)
     console.log(token)
   })
 
@@ -28,6 +28,7 @@ describe('Update Service Ad (e2e)', () => {
         serviceType: 1,
         serviceSubType: 1,
       })
+    console.log(createResponse.body)
 
     const serviceAdId = createResponse.body.serviceAd.id
 
@@ -59,6 +60,6 @@ describe('Update Service Ad (e2e)', () => {
         value: -100, // invalid value
       })
 
-    expect(response.status).toEqual(404)
+    expect(response.status).toEqual(400)
   })
 })
