@@ -39,7 +39,7 @@ export async function createServiceAd(
       return reply.status(404).send({ message: error.message })
     }
 
-    // FIX: make customized errors and void using prisma errors iside controllers
+    // TODO: make customized errors and void using prisma errors iside controllers
     if (error instanceof PrismaClientKnownRequestError) {
       if (error.code === 'P2025') {
         console.error({ error: error.code, cause: error.meta?.cause })
