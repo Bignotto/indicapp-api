@@ -5,6 +5,8 @@ import fastifyJwt from '@fastify/jwt'
 import { fastify } from 'fastify'
 import { ZodError } from 'zod'
 import { env } from './env/config'
+import { serviceSubTypesRoutes } from './http/routes/serviceSubTypes'
+import { serviceTypesRoutes } from './http/routes/serviceTypes'
 
 export const app = fastify()
 
@@ -28,6 +30,8 @@ app.register(fastifyJwt, {
 
 app.register(usersRoutes)
 app.register(serviceAdsRoutes)
+app.register(serviceTypesRoutes)
+app.register(serviceSubTypesRoutes)
 
 app.setErrorHandler((error, _, reply) => {
   if (error instanceof ZodError) {
@@ -39,6 +43,7 @@ app.setErrorHandler((error, _, reply) => {
 
   if (env.NODE_ENV !== 'production') {
     console.error(error)
+    console.error('não imprimir no teste')
   } else {
     // TODO: log unknown error
   }

@@ -1,7 +1,7 @@
-import { InMemoryServiceTypesRepository } from '@/repositories/serviceTypes/InMemory/InMemoryServiceTypesRepository'
+import { PrismaServiceTypesRepository } from '@/repositories/serviceTypes/Prisma/PrismaServiceTypesRepository'
 import { CreateServiceTypeUseCase } from '../createServiceTypeUseCase'
 
 export function makeCreateServiceTypeUseCase(): CreateServiceTypeUseCase {
-  const repository = new InMemoryServiceTypesRepository()
+  const repository = new PrismaServiceTypesRepository()
   return new CreateServiceTypeUseCase(repository)
 }

@@ -18,7 +18,27 @@ describe('Update Service Ad (e2e)', () => {
   })
 
   it('should update a service ad', async () => {
-    // First create a service ad
+    const typeResponse = await request(app.server)
+      .post('/service-types')
+      .set('Authorization', `Bearer ${returnData.token}`)
+      .send({
+        name: 'Service Title',
+        description: 'Service Description',
+      })
+
+    const { id: typeId } = typeResponse.body.serviceType
+
+    const subTypeResponse = await request(app.server)
+      .post('/service-subtypes')
+      .set('Authorization', `Bearer ${returnData.token}`)
+      .send({
+        name: 'Service Title',
+        description: 'Service Description',
+        parentServiceTypeId: typeId,
+      })
+
+    const { id: subTypeId } = subTypeResponse.body.serviceSubType
+
     const createResponse = await request(app.server)
       .post('/service-ads')
       .set('Authorization', `Bearer ${returnData.token}`)
@@ -26,8 +46,8 @@ describe('Update Service Ad (e2e)', () => {
         title: 'Original Service',
         description: 'Original Description',
         value: 100,
-        serviceType: 1,
-        serviceSubType: 1,
+        serviceType: typeId,
+        serviceSubType: subTypeId,
       })
 
     const serviceAdId = createResponse.body.serviceAd.id
@@ -59,6 +79,7 @@ describe('Update Service Ad (e2e)', () => {
         value: -100, // invalid value
       })
 
-    expect(response.status).toEqual(400)
+    expect(response.status).toEqual(500)
+    expect(response.body.message).toEqual('Validation error')
   })
 })

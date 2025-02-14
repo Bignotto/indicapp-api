@@ -9,7 +9,7 @@ export async function updateServiceAd(
   reply: FastifyReply,
 ) {
   const updateServiceAdParamsSchema = z.object({
-    serviceAdId: z.string().uuid(),
+    serviceAdId: z.string(),
   })
 
   const updateServiceAdBodySchema = z.object({

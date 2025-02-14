@@ -23,10 +23,11 @@ describe('Get User', () => {
       .post('/users')
       .set('Authorization', `Bearer ${returnData.token}`)
       .send({
+        id: 'fresh new id',
         name: 'John Doe',
-        email: 'johndoe@example.com',
-        phone: '12345678901',
-        accountProvider: 'GOOGLE',
+        email: 'johndoe@example.com.br',
+        phone: '11999999999',
+        accountProvider: 'EMAIL',
       })
 
     const response = await request(app.server)
@@ -37,8 +38,8 @@ describe('Get User', () => {
     expect(response.body.user).toEqual(
       expect.objectContaining({
         name: 'John Doe',
-        email: 'johndoe@example.com',
-        phone: '12345678901',
+        email: 'johndoe@example.com.br',
+        phone: '11999999999',
       }),
     )
   })

@@ -9,5 +9,5 @@ export async function serviceAdsRoutes(app: FastifyInstance) {
 
   app.post('/service-ads', createServiceAd)
   app.get('/service-ads/:id', getServiceAdDetails)
-  app.put('/service-ads/:id', updateServiceAd)
+  app.put('/service-ads/:serviceAdId', updateServiceAd)
 }

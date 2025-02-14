@@ -20,6 +20,27 @@ describe('Get Service Ad Details (e2e)', () => {
   })
 
   it('should be able to get service ad details', async () => {
+    const typeResponse = await request(app.server)
+      .post('/service-types')
+      .set('Authorization', `Bearer ${returnData.token}`)
+      .send({
+        name: 'Service Title',
+        description: 'Service Description',
+      })
+
+    const { id: typeId } = typeResponse.body.serviceType
+
+    const subTypeResponse = await request(app.server)
+      .post('/service-subtypes')
+      .set('Authorization', `Bearer ${returnData.token}`)
+      .send({
+        name: 'Service Title',
+        description: 'Service Description',
+        parentServiceTypeId: typeId,
+      })
+
+    const { id: subTypeId } = subTypeResponse.body.serviceSubType
+
     const createServiceAdResponse = await request(app.server)
       .post('/service-ads')
       .set('Authorization', `Bearer ${returnData.token}`)
@@ -27,11 +48,9 @@ describe('Get Service Ad Details (e2e)', () => {
         title: 'Service Title',
         description: 'Service Description',
         value: 100,
-        serviceType: 1,
-        serviceSubType: 1,
+        serviceType: typeId,
+        serviceSubType: subTypeId,
       })
-
-    console.log({ createServiceAdResponse })
 
     const { id } = createServiceAdResponse.body.serviceAd
 
