@@ -4,12 +4,13 @@ import request from 'supertest'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 describe('Update Service Ad (e2e)', () => {
-  let token: string | undefined
-
+  let returnData: {
+    token: string
+    userId: string
+  }
   beforeAll(async () => {
     await app.ready()
-    token = await getSupabaseAccessToken(app)
-    console.log(token)
+    returnData = await getSupabaseAccessToken(app)
   })
 
   afterAll(async () => {
@@ -20,7 +21,7 @@ describe('Update Service Ad (e2e)', () => {
     // First create a service ad
     const createResponse = await request(app.server)
       .post('/service-ads')
-      .set('Authorization', `Bearer ${token}`)
+      .set('Authorization', `Bearer ${returnData.token}`)
       .send({
         title: 'Original Service',
         description: 'Original Description',
@@ -28,14 +29,12 @@ describe('Update Service Ad (e2e)', () => {
         serviceType: 1,
         serviceSubType: 1,
       })
-    console.log(createResponse.body)
 
     const serviceAdId = createResponse.body.serviceAd.id
 
-    // TODO: create get service ad route
     const response = await request(app.server)
       .put(`/service-ads/${serviceAdId}`)
-      .set('Authorization', `Bearer ${token}`)
+      .set('Authorization', `Bearer ${returnData.token}`)
       .send({
         title: 'Updated Service',
         description: 'Updated Description',
@@ -55,7 +54,7 @@ describe('Update Service Ad (e2e)', () => {
   it('should not update a service ad with invalid data', async () => {
     const response = await request(app.server)
       .put('/service-ads/invalid-id')
-      .set('Authorization', `Bearer ${token}`)
+      .set('Authorization', `Bearer ${returnData.token}`)
       .send({
         value: -100, // invalid value
       })
