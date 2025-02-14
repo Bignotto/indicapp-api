@@ -14,4 +14,9 @@ export class InMemoryServiceTypesRepository implements IServiceTypesRepository {
     this.serviceTypes.push(serviceType)
     return serviceType
   }
+
+  async findById(id: number): Promise<ServiceType | null> {
+    const serviceType = this.serviceTypes.find((serviceType) => serviceType.id === id)
+    return serviceType || null
+  }
 }

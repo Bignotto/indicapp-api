@@ -10,4 +10,13 @@ export class PrismaServiceTypesRepository implements IServiceTypesRepository {
 
     return serviceType
   }
+
+  async findById(id: number): Promise<ServiceType | null> {
+    const serviceType = await prisma.serviceType.findUnique({
+      where: {
+        id
+      }
+    })
+    return serviceType || null
+  }
 }
