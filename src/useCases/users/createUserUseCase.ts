@@ -4,6 +4,7 @@ import { EmailAlreadyInUseError } from "./errors/EmailAlreadyInUseError";
 import { InvalidPhoneNumberError } from "./errors/InvalidPhoneNumberError";
 
 interface CreateNewUserRequest {
+  id: string,
   name: string
   email: string
   phone?: string
@@ -24,7 +25,7 @@ export class CreateUserUseCase {
   ) { }
 
   async execute({
-    name, email, phone, accountProvider, accountId, image, phoneConfirmed, emailConfirmed
+    id, name, email, phone, accountProvider, accountId, image, phoneConfirmed, emailConfirmed
   }: CreateNewUserRequest): Promise<CreateNewUserResponse> {
     const userWithSameEmail = await this.usersRepository.findByEmail(email)
     if (userWithSameEmail) {
@@ -37,6 +38,7 @@ export class CreateUserUseCase {
     }
 
     const user = await this.usersRepository.create({
+      id,
       name,
       email,
       phone: cleanedPhone,

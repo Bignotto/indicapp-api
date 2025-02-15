@@ -85,16 +85,19 @@ model ServiceType {
   id          Int                 @id @default(autoincrement())
   name        String
   description String
+  childTypes  ServiceSubType[]
   services    ProviderServiceAd[]
 
   @@map(name: "service_types")
 }
 
 model ServiceSubType {
-  id          Int                 @id @default(autoincrement())
-  name        String
-  description String
-  services    ProviderServiceAd[]
+  id           Int                 @id @default(autoincrement())
+  name         String
+  description  String
+  parentType   ServiceType         @relation(fields: [parentTypeId], references: [id])
+  parentTypeId Int                 @map(name: "parent_type_id")
+  services     ProviderServiceAd[]
 
   @@map(name: "service_sub_types")
 }

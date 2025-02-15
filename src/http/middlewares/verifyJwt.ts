@@ -3,10 +3,14 @@ import { FastifyReply, FastifyRequest } from 'fastify'
 export async function verifyJwt(request: FastifyRequest, reply: FastifyReply) {
   try {
     if (!request.headers.authorization) {
-      // essa validação
-      throw new Error()
+      throw new Error('Missing authorization header')
     }
-    await request.jwtVerify()
+
+    const payload = await request.jwtVerify()
+
+    request.user = {
+      sub: (payload as { sub: string }).sub,
+    }
   } catch (error) {
     return reply.status(401).send({ message: 'Unauthorized.' })
   }
