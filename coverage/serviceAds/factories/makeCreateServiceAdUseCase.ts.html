@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>10/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>1/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>1/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>10/10</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -77,34 +77,34 @@
 <a name='L12'></a><a href='#L12'>12</a>
 <a name='L13'></a><a href='#L13'>13</a>
 <a name='L14'></a><a href='#L14'>14</a>
-<a name='L15'></a><a href='#L15'>15</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L15'></a><a href='#L15'>15</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="branch-0 cbranch-no" title="branch not covered" >import { PrismaServiceAdsRepository } from '@/repositories/serviceAds/Prisma/PrismaServiceAdsRepository'</span></span></span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { PrismaServiceAdsRepository } from '@/repositories/serviceAds/Prisma/PrismaServiceAdsRepository'
 import { PrismaUsersRepository } from '@/repositories/users/Prisma/PrismaUsersRepository'
 import { CreateServiceAdUseCase } from '../createServiceAd'
 &nbsp;
-<span class="cstat-no" title="statement not covered" >export function makeCreateServiceAdUseCase() {</span>
-<span class="cstat-no" title="statement not covered" >  const serviceAdsRepository = new PrismaServiceAdsRepository()</span>
-<span class="cstat-no" title="statement not covered" >  const usersRepository = new PrismaUsersRepository()</span>
-<span class="cstat-no" title="statement not covered" >  const useCase = new CreateServiceAdUseCase(</span>
-<span class="cstat-no" title="statement not covered" >    usersRepository,</span>
-<span class="cstat-no" title="statement not covered" >    serviceAdsRepository,</span>
-<span class="cstat-no" title="statement not covered" >  )</span>
+export function makeCreateServiceAdUseCase() {
+  const serviceAdsRepository = new PrismaServiceAdsRepository()
+  const usersRepository = new PrismaUsersRepository()
+  const useCase = new CreateServiceAdUseCase(
+    usersRepository,
+    serviceAdsRepository,
+  )
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return useCase</span>
-<span class="cstat-no" title="statement not covered" >}</span>
+  return useCase
+}
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -112,7 +112,7 @@ import { CreateServiceAdUseCase } from '../createServiceAd'
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-02-14T08:46:50.155Z
+                at 2025-02-14T21:45:44.655Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

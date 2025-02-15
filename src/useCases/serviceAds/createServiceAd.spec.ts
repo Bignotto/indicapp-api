@@ -28,6 +28,8 @@ describe('Create Service Ad Use Case', () => {
       title: 'Service Title',
       description: 'Service Description',
       value: 100,
+      serviceType: 1,
+      serviceSubType: 1,
     })
 
     expect(serviceAd.id).toBeTruthy()
@@ -42,6 +44,8 @@ describe('Create Service Ad Use Case', () => {
         title: 'Service Title',
         description: 'Service Description',
         value: 100,
+        serviceType: 1,
+        serviceSubType: 1,
       }),
     ).rejects.toBeInstanceOf(UserNotFoundError)
   })
@@ -59,6 +63,8 @@ describe('Create Service Ad Use Case', () => {
       title: 'Service Title',
       description: 'Service Description',
       value: 100,
+      serviceType: 1,
+      serviceSubType: 1,
     })
 
     const storedServiceAd = await serviceAdsRepository.findById(serviceAd.id)

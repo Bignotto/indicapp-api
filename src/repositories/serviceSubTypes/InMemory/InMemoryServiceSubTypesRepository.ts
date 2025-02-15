@@ -14,4 +14,14 @@ export class InMemoryServiceSubTypesRepository implements IServiceSubTypesReposi
     this.serviceSubTypes.push(newServiceSubType)
     return newServiceSubType
   }
+
+  async findByParentId(parentId: number): Promise<ServiceSubType[]> {
+    const serviceSubTypes = this.serviceSubTypes.filter(item => item.parentTypeId === parentId)
+    return serviceSubTypes
+  }
+
+  async findById(id: number): Promise<ServiceSubType | null> {
+    const serviceSubType = this.serviceSubTypes.find(item => item.id === id)
+    return serviceSubType || null
+  }
 }

@@ -24,7 +24,6 @@ export class CreateServiceSubTypeUseCase {
     description,
     parentServiceTypeId,
   }: CreateServiceSubTypeUseCaseRequest): Promise<CreateServiceSubTypeUseCaseResponse> {
-    // Check if the parent service type exists.
     const parentServiceType = await this.serviceTypesRepository.findById(parentServiceTypeId)
     if (!parentServiceType) {
       throw new ParentServiceTypeNotFound(parentServiceTypeId.toString())
