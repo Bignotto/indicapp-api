@@ -19,4 +19,9 @@ export class PrismaServiceTypesRepository implements IServiceTypesRepository {
     })
     return serviceType || null
   }
+
+  async findAll(): Promise<ServiceType[]> {
+    const serviceTypes = await prisma.serviceType.findMany()
+    return serviceTypes
+  }
 }

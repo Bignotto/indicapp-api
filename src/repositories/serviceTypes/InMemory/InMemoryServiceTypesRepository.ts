@@ -4,6 +4,10 @@ import { IServiceTypesRepository } from '../IServiceTypesRepository'
 export class InMemoryServiceTypesRepository implements IServiceTypesRepository {
   public serviceTypes: ServiceType[] = []
 
+  async findAll() {
+    return this.serviceTypes
+  }
+
   async create(data: Prisma.ServiceTypeCreateInput): Promise<ServiceType> {
     const serviceType: ServiceType = {
       id: this.serviceTypes.length + 1,
