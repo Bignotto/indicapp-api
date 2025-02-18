@@ -1,6 +1,6 @@
 import { Prisma, Review } from "@prisma/client"
 
-export interface IreviewsRepository {
+export interface IReviewsRepository {
   create(data: Prisma.ReviewCreateInput): Promise<Review>
   findById(id: number): Promise<Review | null>
   findByReviewerId(reviewerId: string): Promise<Review[]>
