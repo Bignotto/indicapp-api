@@ -1,25 +1,51 @@
+import { ServiceAdNotFoundError } from '@/global/errors/ServiceAdNotFoundError'
+import { UserNotFoundError } from '@/global/errors/UserNotFoundError'
 import { InMemoryReviewsRepository } from '@/repositories/reviews/InMemory/InMemoryReviewsRepository'
 import { InMemoryServiceAdsRepository } from '@/repositories/serviceAds/InMemory/InMemoryServiceAdsRepository'
+import { InMemoryServiceSubTypesRepository } from '@/repositories/serviceSubTypes/InMemory/InMemoryServiceSubTypesRepository'
+import { InMemoryServiceTypesRepository } from '@/repositories/serviceTypes/InMemory/InMemoryServiceTypesRepository'
 import { InMemoryUsersRepository } from '@/repositories/users/InMemory/usersRepository'
-import { randomUUID } from 'node:crypto'
+import { ServiceType } from '@prisma/client'
 import { beforeEach, describe, expect, it } from 'vitest'
 import { CreateReviewUseCase } from './createReview'
 
 let usersRepository: InMemoryUsersRepository
 let reviewsRepository: InMemoryReviewsRepository
 let serviceAdsRepository: InMemoryServiceAdsRepository
+let serviceTypesRepository: InMemoryServiceTypesRepository
+let serviceSubTypesRepository: InMemoryServiceSubTypesRepository
+
+let type: ServiceType
+let subType: ServiceType
 let sut: CreateReviewUseCase
 
 describe('Create Review Use Case', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     usersRepository = new InMemoryUsersRepository()
     reviewsRepository = new InMemoryReviewsRepository()
     serviceAdsRepository = new InMemoryServiceAdsRepository()
+    serviceTypesRepository = new InMemoryServiceTypesRepository()
+    serviceSubTypesRepository = new InMemoryServiceSubTypesRepository()
     sut = new CreateReviewUseCase(
       usersRepository,
       reviewsRepository,
       serviceAdsRepository,
     )
+
+    type = await serviceTypesRepository.create({
+      name: 'Service Type',
+      description: 'Service Type Description',
+    })
+
+    subType = await serviceSubTypesRepository.create({
+      name: 'Service Sub Type',
+      description: 'Service Sub Type Description',
+      parentType: {
+        connect: {
+          id: type.id,
+        },
+      },
+    })
   })
 
   it('should create a new review', async () => {
@@ -28,14 +54,28 @@ describe('Create Review Use Case', () => {
       email: 'john@example.com',
     })
 
-    // NEXT: Create type and sub type for testing purposes
     const serviceAd = await serviceAdsRepository.create({
-      providerId: user.id,
       title: 'Service Title',
       description: 'Service Description',
       value: 100,
-      serviceType: 1,
-      serviceSubType: 1,
+      provider: {
+        connect: {
+          id: user.id,
+        },
+      },
+      serviceType: {
+        connect: {
+          id: type.id,
+        },
+      },
+      serviceSubType: {
+        connect: {
+          id: subType.id,
+        },
+      },
+      serviceClass: 'SERVICE',
+      validFrom: new Date(),
+      validTo: new Date(),
     })
 
     const { review } = await sut.execute({
@@ -58,9 +98,22 @@ describe('Create Review Use Case', () => {
       value: 100,
       provider: {
         connect: {
-          id: randomUUID(),
+          id: 'Invalid user id',
         },
       },
+      serviceType: {
+        connect: {
+          id: type.id,
+        },
+      },
+      serviceSubType: {
+        connect: {
+          id: subType.id,
+        },
+      },
+      serviceClass: 'SERVICE',
+      validFrom: new Date(),
+      validTo: new Date(),
     })
 
     await expect(() =>
