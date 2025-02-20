@@ -33,8 +33,12 @@ export class CreateServiceAdUseCase {
     const user = await this.usersRepository.findById(providerId)
 
     if (!user) {
-      throw new UserNotFoundError(providerId)
+      throw new
+        UserNotFoundError(providerId)
     }
+
+    //TODO: check if user is provider
+    //TODO: check if type and subtype are valid
 
     const today = new Date()
     const validTo = new Date(today.getFullYear() + 1, today.getMonth(), today.getDate())
