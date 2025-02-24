@@ -1,9 +1,9 @@
 import { Prisma, PrismaClient, Review } from '@prisma/client';
-import { IreviewsRepository } from '../IReviewsRepository';
+import { IReviewsRepository } from '../IReviewsRepository';
 
 const prisma = new PrismaClient();
 
-class PrismaReviewsRepository implements IreviewsRepository {
+class PrismaReviewsRepository implements IReviewsRepository {
   create(data: Prisma.ReviewCreateInput): Promise<Review> {
     const review = prisma.review.create({
       data,
@@ -45,6 +45,14 @@ class PrismaReviewsRepository implements IreviewsRepository {
       where: { id },
     });
   }
+
+  async delete(id: number): Promise<void> {
+    await prisma.review.delete({
+      where: { id },
+    })
+  }
 }
 
 export default PrismaReviewsRepository;
+
+

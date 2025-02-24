@@ -1,7 +1,7 @@
 import { Prisma, Review } from "@prisma/client";
-import { IreviewsRepository } from "../IReviewsRepository";
+import { IReviewsRepository } from "../IReviewsRepository";
 
-export class InMemoryReviewsRepository implements IreviewsRepository {
+export class InMemoryReviewsRepository implements IReviewsRepository {
   public items: Review[] = []
 
   async create(data: Prisma.ReviewCreateInput): Promise<Review> {
@@ -52,4 +52,12 @@ export class InMemoryReviewsRepository implements IreviewsRepository {
 
   }
 
+  async delete(id: number): Promise<void> {
+    const reviewIndex = this.items.findIndex(item => item.id === id)
+
+    if (reviewIndex >= 0) {
+      this.items.splice(reviewIndex, 1)
+    }
+  }
 }
+

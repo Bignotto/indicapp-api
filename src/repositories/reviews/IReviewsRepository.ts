@@ -6,4 +6,5 @@ export interface IReviewsRepository {
   findByReviewerId(reviewerId: string): Promise<Review[]>
   findByServiceAdId(serviceAdId: string): Promise<Review[]>
   update(id: number, data: Prisma.ReviewUpdateInput): Promise<Review>
+  delete(id: number): Promise<void>
 }
