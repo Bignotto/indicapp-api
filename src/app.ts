@@ -4,6 +4,7 @@ import fastifyJwt from '@fastify/jwt'
 import { fastify } from 'fastify'
 import { ZodError } from 'zod'
 import { env } from './env/config'
+import { reviewsRoutes } from './http/routes/reviews'
 import { serviceSubTypesRoutes } from './http/routes/serviceSubTypes'
 import { serviceTypesRoutes } from './http/routes/serviceTypes'
 import { usersRoutes } from './http/routes/users'
@@ -32,6 +33,7 @@ app.register(usersRoutes)
 app.register(serviceAdsRoutes)
 app.register(serviceTypesRoutes)
 app.register(serviceSubTypesRoutes)
+app.register(reviewsRoutes)
 
 app.setErrorHandler((error, _, reply) => {
   if (error instanceof ZodError) {
