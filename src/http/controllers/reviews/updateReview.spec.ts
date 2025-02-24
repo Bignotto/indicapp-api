@@ -5,7 +5,7 @@ import { ProviderServiceAd } from '@prisma/client'
 import request from 'supertest'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
-describe('Delete Review (e2e)', () => {
+describe('Update Review (e2e)', () => {
   let accessData: {
     token: string
     userId: string
@@ -55,35 +55,37 @@ describe('Delete Review (e2e)', () => {
     await app.close()
   })
 
-  it('should delete a review', async () => {
+  it('should update a review', async () => {
     const review = await prisma.review.create({
       data: {
-        title: 'Test Review',
-        text: 'Test Review Text',
-        score: 5,
+        title: 'Original Review',
+        text: 'Original Text',
+        score: 3,
         reviewerId: accessData.userId,
         providerServiceId: serviceAd1.id,
       },
     })
 
     const response = await request(app.server)
-      .delete(`/reviews/${review.id}`)
+      .put(`/reviews/${review.id}`)
       .set('Authorization', `Bearer ${accessData.token}`)
-      .send()
+      .send({
+        title: 'Updated Review',
+        text: 'Updated Text',
+        score: 5,
+      })
 
     expect(response.statusCode).toBe(200)
-
-    const deletedReview = await prisma.review.findUnique({
-      where: {
-        id: review.id,
-      },
-    })
-
-    expect(deletedReview).toBeNull()
+    expect(response.body.review).toEqual(
+      expect.objectContaining({
+        title: 'Updated Review',
+        text: 'Updated Text',
+        score: 5,
+      }),
+    )
   })
 
-  // TODO: complete tests
-  it('should not delete review from another user', async () => {
+  it('should not update review from another user', async () => {
     const otherUser = await prisma.user.create({
       data: {
         id: 'other-user-id',
@@ -105,19 +107,37 @@ describe('Delete Review (e2e)', () => {
     })
 
     const response = await request(app.server)
-      .delete(`/reviews/${review.id}`)
+      .put(`/reviews/${review.id}`)
       .set('Authorization', `Bearer ${accessData.token}`)
-      .send()
+      .send({
+        title: 'Updated Review',
+      })
 
     expect(response.statusCode).toBe(401)
   })
 
-  it('should return 404 when trying to delete non-existing review', async () => {
-    const response = await request(app.server)
-      .delete('/reviews/999999')
-      .set('Authorization', `Bearer ${accessData.token}`)
-      .send()
+  it('should validate review score range', async () => {
+    const review = await prisma.review.create({
+      data: {
+        title: 'Test Review',
+        text: 'Test Review Text',
+        score: 5,
+        reviewerId: accessData.userId,
+        providerServiceId: serviceAd1.id,
+      },
+    })
 
-    expect(response.statusCode).toBe(404)
+    const response = await request(app.server)
+      .put(`/reviews/${review.id}`)
+      .set('Authorization', `Bearer ${accessData.token}`)
+      .send({
+        score: 6,
+      })
+    expect(response.statusCode).toBe(500)
+    expect(response.body).toEqual(
+      expect.objectContaining({
+        message: expect.any(String),
+      }),
+    )
   })
 })
