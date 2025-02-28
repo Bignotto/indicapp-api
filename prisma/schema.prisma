@@ -137,16 +137,17 @@ enum LogEvent {
   SEARCH
   VIEW
   CONTACT
+  RECOMMEND
 }
 
 model Log {
   id           Int      @id @default(autoincrement())
   event        LogEvent
-  eventDate    DateTime @map(name: "event_date")
-  subject      String
-  data         String
-  userId       String   @map(name: "user_id")
-  userProvider String   @map(name: "user_provider")
+  eventDate    DateTime @default(now()) @map(name: "event_date")
+  subject      String?
+  data         String?
+  userId       String?  @map(name: "user_id")
+  userProvider String?  @map(name: "user_provider")
 
   @@map("log")
 }
